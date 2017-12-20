@@ -11,7 +11,7 @@
 	<div id="message"></div>
 	<div id="timer"></div>
 </div>
-<button id="submit">Submit</button>
+<button id="submit" onclick="bwoggle">Submit</button>
 
 AUDIO:
 <audio controls src="https://raw.githubusercontent.com/madelson/Escape/master/gong.wav"></audio>
@@ -23,7 +23,10 @@ AUDIO:
   crossorigin="anonymous"></script>
 
 <script type="text/javascript">
-    window.alert("i'm a script!")
+    function bwoggle() {
+		console.log("hi");
+		window.alert("hi");
+	}
 </script>
 
 https://jsfiddle.net/jhpvLufb/26/
