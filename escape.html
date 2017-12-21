@@ -26,7 +26,8 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
-
+<script type="text/javascript" src="https://raw.githubusercontent.com/madelson/Escape/master/NoSleep.js" />
+ 
 <!-- earlier version at https://jsfiddle.net/jhpvLufb/33/ -->
   
 <script type="text/javascript">
@@ -180,6 +181,9 @@ $(window).on("load", function () {
 	  
 	  executeStep();
 	};
+	
+	var noSleep = new NoSleep();
+	noSleep.enable();
 	
 	$('body').css({ display: "inline" });
 });
