@@ -1,0 +1,1 @@
+# Click [here](http://htmlpreview.github.io/?https://raw.githubusercontent.com/madelson/Escape/master/escape.html) to play
