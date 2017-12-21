@@ -67,6 +67,12 @@ var steps = [
   }
 ];
 
+// for debugging, set to < 1
+var speedFactor = .1;
+for (var i = 0; i < steps.length; ++i) {
+	if (steps[i].length) { steps[i].length *= speedFactor; }
+}
+
 // state
 var currentStep = 0;
 var pausedStep = 1;
