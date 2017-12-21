@@ -37,7 +37,7 @@ var steps = [
   },
   {
 	text: "Get ready...",
-	length: 4.5, // needs to match countdown
+	length: 4, // needs to match countdown
 	color: "crimson",
 	sound: "countdown"
 	},
@@ -99,10 +99,11 @@ function formatTime(seconds) {
 
 var currentlyPlaying = null;
 function playAudio(id) {
-	if (currentlyPlaying) { 
-		currentlyPlaying.pause();
-	}
 	if (typeof id === "string") {
+		if (currentlyPlaying) { 
+			currentlyPlaying.pause();
+		}
+	
 		currentlyPlaying = document.getElementById(id);
 		currentlyPlaying.currentTime = 0;
 		currentlyPlaying.play();
