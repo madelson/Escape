@@ -147,8 +147,10 @@ $(window).on("load", function () {
 	var speedupFactor; 
 	if (window.location.href.toLowerCase().indexOf("speedup=medium") >= 0) {
 		speedupFactor = .1;
+		console.log("speedup x " + (1 / speedupFactor));
 	} else if (window.location.href.toLowerCase().indexOf("speedup=high") >= 0) {
 		speedupFactor = .05;
+		console.log("speedup x " + (1 / speedupFactor));
 	} else {
 		speedupFactor = 1;
 	}
