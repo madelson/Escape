@@ -7,13 +7,12 @@
 
 <body>
 
-<div id="display">
-	<div id="message"></div>
-	<div id="timer"></div>
+<div id="display" style="text-align: center; visibility: hidden;">
+	<div id="message" style="font-size: 40px; padding: 20px;">Click Play to start!</div>
+	<div id="timer" style="font-size: 90px; padding: 20px;"></div>
 </div>
-<button id="submit" onclick="bwoggle()">Submit</button>
+<center style="padding: 5px;"><button id="submit" style="width: 50%; height: 50px;">Start</button></center>
 
-AUDIO:
 <audio controls src="https://raw.githubusercontent.com/madelson/Escape/master/gong.wav"></audio>
 
 <script
@@ -22,20 +21,119 @@ AUDIO:
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
 
-<div id="x"></div>
+<!-- earlier version at https://jsfiddle.net/jhpvLufb/33/ -->
   
- JS
 <script type="text/javascript">
-    function bwoggle() {
-		console.log("hi");
-		
-		//var win = window;
-		//while (win !== win.parent) { win = win.parent; }
-		
-		document.getElementById("x").innerHTML = window.location.href;
-	}
+
+var steps = [
+	{ 
+  	text: "Paused: click Resume to play or refresh the page to reset."
+  },
+  { 
+  	text: "Round 1: Explore the temple!", 
+    length: 220,
+    color: "green"
+  },
+  { 
+  	text: "Return 1: Return to the start room!", 
+    length: 40,
+    color: "yellow"
+  },
+  { 
+  	text: "Round 2: Explore the temple!", 
+    length: 140,
+    color: "green"
+  },
+  { 
+  	text: "Return 2: Return to the start room!",
+    length: 40,
+    color: "yellow"
+  },
+  { 
+  	text: "Round 3: Explore the temple!", 
+    length: 120 
+  },
+  { 
+  	text: "ESCAPE!", 
+    length: 40,
+    color: "red"
+  },
+  {
+  	text: "OUT OF TIME!",
+    color: "red"
+  }
+];
+
+// state
+var currentStep = 0;
+var pausedStep = 1;
+var stepSecondsRemaining = null;
+var currentTimeout = null;
+
+function formatTime(seconds) {
+  if (seconds === null) { return ""; }
+
+  var minutesPart = Math.floor(seconds / 60);
+  var secondsPart = seconds - (60 * minutesPart);
+  return minutesPart + ":" + (secondsPart < 10 ? "0" : "") + secondsPart;
+}
+
+function executeStep() {
+	var display = document.getElementById("display");
+  var message = document.getElementById("message");
+  var timer = document.getElementById("timer");
+  var submit = document.getElementById("submit");
+  var step = steps[currentStep]; 
+  
+  if (typeof step.length === "number" && stepSecondsRemaining === null) {
+  	stepSecondsRemaining = step.length;
+  }
+  
+  display.style.backgroundColor = step.color || "white";
+  message.innerHTML = step.text;
+  timer.innerHTML = formatTime(stepSecondsRemaining);
+  submit.innerHTML = typeof step.length === "number" ? "Pause" : "Resume";
+  
+  if (typeof step.length === "number") {    
+    function tick() {
+    	timer.innerHTML = formatTime(stepSecondsRemaining);
+    	if (stepSecondsRemaining > 0) {
+      	currentTimeout = window.setTimeout(tick, 1000);
+        stepSecondsRemaining--;
+      } else {
+      	stepSecondsRemaining = null;
+      	currentStep++;
+        executeStep();
+      } 
+    }
+    
+    tick();
+  }
+}
+
+$(window).on("load", function () {
+	// if we loaded without a cache buster, reload with a cache buster
+	if (window.location.href.indexOf("?cb=") < 0) {
+		window.location.href += "?cb=" + Date.now();
+		return;
+	}	
+
+	document.getElementById("submit").onclick = function() { 
+		if (pausedStep !== null) {
+		currentStep = pausedStep;
+		pausedStep = null;
+	  } else {
+		pausedStep = currentStep;
+		currentStep = 0;
+		window.clearTimeout(currentTimeout);
+	  }
+	  
+	  executeStep();
+	};
+	
+	$('#display').css({ visibility: "visible" });
+});
 </script>
 
-https://jsfiddle.net/jhpvLufb/26/
 </body>
 </html>
