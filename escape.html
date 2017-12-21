@@ -5,9 +5,9 @@
 
 </head>
 
-<body>
+<body style="visibility: hidden;">
 
-<div id="display" style="text-align: center; visibility: hidden;">
+<div id="display" style="text-align: center;">
 	<div id="message" style="font-size: 40px; padding: 20px;">Click Play to start!</div>
 	<div id="timer" style="font-size: 90px; padding: 20px;"></div>
 </div>
@@ -131,7 +131,7 @@ $(window).on("load", function () {
 	  executeStep();
 	};
 	
-	$('#display').css({ visibility: "visible" });
+	$('body').css({ visibility: "visible" });
 });
 </script>
 
