@@ -28,8 +28,11 @@ AUDIO:
 <script type="text/javascript">
     function bwoggle() {
 		console.log("hi");
-		//window.alert("hi");
-		document.getElementById("x").innerHTML = window.href;
+		
+		//var win = window;
+		//while (win !== win.parent) { win = win.parent; }
+		
+		document.getElementById("x").innerHTML = window.location.href;
 	}
 </script>
 
