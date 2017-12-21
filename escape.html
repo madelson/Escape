@@ -14,7 +14,9 @@
 <center style="padding: 5px;"><button id="submit" style="width: 50%; height: 50px;">Start</button></center>
 
 <div style="display: none;">
+	<!-- from https://freesound.org/browse/tags/sound-effects/ -->
 	<audio id="gong" src="https://raw.githubusercontent.com/madelson/Escape/master/gong.wav"></audio>
+	<audio id="cymbal" src="https://raw.githubusercontent.com/madelson/Escape/master/cymbal.wav"></audio>
 </div>
 
 
@@ -35,35 +37,42 @@ var steps = [
   { 
   	text: "Round 1: Explore the temple!", 
     length: 220,
-    color: "green"
+    color: "lime"
   },
   { 
   	text: "Return 1: Return to the start room!", 
     length: 40,
-    color: "yellow"
+    color: "yellow",
+	sound: "gong"
   },
   { 
   	text: "Round 2: Explore the temple!", 
     length: 140,
-    color: "green"
+    color: "green",
+	sound: "cymbal"
   },
   { 
   	text: "Return 2: Return to the start room!",
     length: 40,
-    color: "yellow"
+    color: "yellow",
+	sound: "gong"
   },
   { 
   	text: "Round 3: Explore the temple!", 
-    length: 120 
+    length: 120,
+	color: "darkgreen",
+	sound: "cymbal"
   },
   { 
   	text: "ESCAPE!", 
     length: 40,
-    color: "red"
+    color: "red",
+	sound: "gong"
   },
   {
   	text: "OUT OF TIME!",
-    color: "red"
+    color: "red",
+	sound: "cymbal"
   }
 ];
 
@@ -87,8 +96,20 @@ function formatTime(seconds) {
   return minutesPart + ":" + (secondsPart < 10 ? "0" : "") + secondsPart;
 }
 
+var currentlyPlaying = null;
+function playAudio(id) {
+	if (currentlyPlaying) { 
+		currentlyPlaying.pause();
+	}
+	if (typeof id === "string") {
+		currentlyPlaying = document.getElementById(id);
+		currentlyPlaying.currentTime = 0;
+		currentlyPlaying.play();
+	}
+}
+
 function executeStep() {
-	var display = document.getElementById("display");
+  var display = document.getElementById("display");
   var message = document.getElementById("message");
   var timer = document.getElementById("timer");
   var submit = document.getElementById("submit");
@@ -98,6 +119,7 @@ function executeStep() {
   	stepSecondsRemaining = step.length;
   }
   
+  playAudio(step.sound);
   display.style.backgroundColor = step.color || "white";
   message.innerHTML = step.text;
   timer.innerHTML = formatTime(stepSecondsRemaining);
@@ -105,15 +127,15 @@ function executeStep() {
   
   if (typeof step.length === "number") {    
     function tick() {
-    	timer.innerHTML = formatTime(stepSecondsRemaining);
-    	if (stepSecondsRemaining > 0) {
-      	currentTimeout = window.setTimeout(tick, 1000);
-        stepSecondsRemaining--;
-      } else {
-      	stepSecondsRemaining = null;
-      	currentStep++;
-        executeStep();
-      } 
+		timer.innerHTML = formatTime(stepSecondsRemaining);
+		if (stepSecondsRemaining > 0) {
+			currentTimeout = window.setTimeout(tick, 1000);
+			stepSecondsRemaining--;
+		} else {
+			stepSecondsRemaining = null;
+			currentStep++;
+			executeStep();
+		} 
     }
     
     tick();
