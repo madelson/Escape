@@ -76,12 +76,6 @@ var steps = [
   }
 ];
 
-// for debugging, set to < 1
-var speedFactor = .05;
-for (var i = 0; i < steps.length; ++i) {
-	if (steps[i].length) { steps[i].length *= speedFactor; }
-}
-
 // state
 var currentStep = 0;
 var pausedStep = 1;
@@ -144,9 +138,24 @@ function executeStep() {
 
 $(window).on("load", function () {
 	// if we loaded without a cache buster, reload with a cache buster
-	if (window.location.href.indexOf("?cb=") < 0) {
-		window.location.href += "?cb=" + Date.now();
+	if (window.location.href.indexOf("cb=") < 0) {
+		window.location.href += "?&cb=" + Date.now();
 		return;
+	}	
+	
+	// check for debug speedup
+	var speedupFactor; 
+	if (window.location.href.toLowerCase().indexOf("speedup=medium") >= 0) {
+		speedupFactor = .1;
+	} else if (window.location.href.toLowerCase().indexOf("speedup=medium") >= 0) {
+		speedupFactor = .05;
+	} else {
+		speedupFactor = 1;
+	}
+	for (var i = 0; i < steps.length; ++i) {
+		if (typeof steps[i].length === "number") {
+			steps[i].length *= speedupFactor;
+		}
 	}	
 
 	document.getElementById("submit").onclick = function() { 
