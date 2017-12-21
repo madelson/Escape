@@ -5,7 +5,7 @@
 
 </head>
 
-<body style="visibility: hidden;">
+<body style="display: none;">
 
 <div id="display" style="text-align: center;">
 	<div id="message" style="font-size: 40px; padding: 20px;">Click Play to start!</div>
@@ -13,7 +13,10 @@
 </div>
 <center style="padding: 5px;"><button id="submit" style="width: 50%; height: 50px;">Start</button></center>
 
-<audio controls src="https://raw.githubusercontent.com/madelson/Escape/master/gong.wav"></audio>
+<div style="display: none;">
+	<audio id="gong" src="https://raw.githubusercontent.com/madelson/Escape/master/gong.wav"></audio>
+</div>
+
 
 <script
   type="text/javascript"
@@ -131,7 +134,7 @@ $(window).on("load", function () {
 	  executeStep();
 	};
 	
-	$('body').css({ visibility: "visible" });
+	$('body').css({ display: "inline" });
 });
 </script>
 
