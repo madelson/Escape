@@ -150,9 +150,7 @@ function executeStep() {
 }
 
 var audioLoaded = false;
-function ensureAudioLoaded(callback) {
-	alert("ensuring audio loaded");	
-	
+function ensureAudioLoaded(callback) {	
 	if (audioLoaded) {
 		callback();
 		return;
@@ -160,17 +158,13 @@ function ensureAudioLoaded(callback) {
 
 	function log(message) {
 		console.log(message);
-		alert(message);
 	}
 
 	// wait for audio to load https://stackoverflow.com/questions/8059434/how-do-you-check-if-a-html5-audio-element-is-loaded
 	var audioElements = $("audio");
 	var remainingAudioElementsToLoad = audioElements.length;
 	log("Loading " + remainingAudioElementsToLoad + " audio files");
-	audioElements.each(function (index, element) {
-		element.play();
-		element.pause();
-	
+	audioElements.each(function (index, element) {	
 		var onLoaded = function () {
 			--remainingAudioElementsToLoad;
 			log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
@@ -190,8 +184,6 @@ function ensureAudioLoaded(callback) {
 }
 
 function main() {
-	alert("entering main");
-
 	// check for debug speedup
 	var speedupFactor; 
 	if (window.location.href.toLowerCase().indexOf("speedup=medium") >= 0) {
@@ -210,8 +202,16 @@ function main() {
 	}
 	
 	document.getElementById("submit").onclick = function() {
-		alert("clicked submit");
 		$("#submit").attr("disabled", "disabled");
+	
+		// workaround for stupid ios limitation that audio won't load unless play()
+		// is called at some point from a click event handler. See
+		// https://www.ibm.com/developerworks/library/wa-ioshtml5/
+		$("audio").each(function (index, element) {
+			element.play();
+			element.pause();
+		});
+
 	
 		ensureAudioLoaded(function () {
 			$("#submit").removeAttr("disabled");
