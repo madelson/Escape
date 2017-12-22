@@ -151,7 +151,8 @@ function executeStep() {
 
 var audioLoaded = false;
 function ensureAudioLoaded(callback) {
-	alert("ensuring audio loaded");
+	alert("ensuring audio loaded");	
+	
 	if (audioLoaded) {
 		callback();
 		return;
@@ -167,6 +168,9 @@ function ensureAudioLoaded(callback) {
 	var remainingAudioElementsToLoad = audioElements.length;
 	log("Loading " + remainingAudioElementsToLoad + " audio files");
 	audioElements.each(function (index, element) {
+		element.play();
+		element.pause();
+	
 		var onLoaded = function () {
 			--remainingAudioElementsToLoad;
 			log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
