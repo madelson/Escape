@@ -199,7 +199,8 @@ function main() {
 		if (typeof steps[i].length === "number" && steps.sound !== "countdown") {
 			steps[i].length *= speedupFactor;
 		}
-	}	
+	}
+	console.log(steps);
 
 	document.getElementById("submit").onclick = function() {
 		$("#submit").attr("disabled", "disabled");
