@@ -176,6 +176,7 @@ function ensureAudioLoaded(callback) {
 			}
 		};
 		
+		log(element.id + ".readyState = " + element.readyState);
 		if (element.readyState === 4) {
 			onLoaded();
 		} else {
