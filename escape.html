@@ -196,11 +196,10 @@ function main() {
 		speedupFactor = 1;
 	}
 	for (var i = 0; i < steps.length; ++i) {
-		if (typeof steps[i].length === "number" && steps.sound !== "countdown") {
+		if (typeof steps[i].length === "number" && steps[i].sound !== "countdown") {
 			steps[i].length *= speedupFactor;
 		}
 	}
-	console.log(steps);
 
 	document.getElementById("submit").onclick = function() {
 		$("#submit").attr("disabled", "disabled");
