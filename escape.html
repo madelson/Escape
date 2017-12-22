@@ -169,6 +169,8 @@ $(window).on("load", function () {
 			steps[i].length *= speedupFactor;
 		}
 	}	
+	
+	$('audio').on('canplaythrough', function () { window.alert("ready!"); });
 
 	document.getElementById("submit").onclick = function() { 
 		if (pausedStep !== null) {
