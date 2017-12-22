@@ -149,6 +149,32 @@ function executeStep() {
   }
 }
 
+function ensureAudioLoaded(callback) {
+	function log(message) {
+		console.log(message);
+	}
+
+	// wait for audio to load https://stackoverflow.com/questions/8059434/how-do-you-check-if-a-html5-audio-element-is-loaded
+	var audioElements = $("audio");
+	var remainingAudioElementsToLoad = audioElements.length;
+	log("Loading " + remainingAudioElementsToLoad + " audio files");
+	audioElements.each(function (index, element) {
+		var onLoaded = function () {
+			--remainingAudioElementsToLoad;
+			log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
+			if (remainingAudioElementsToLoad === 0) {
+				callback();
+			}
+		};
+		
+		if (element.readyState === 4) {
+			onLoaded();
+		} else {
+			$(element).on("canplaythrough", onLoaded);
+		}
+	});
+}
+
 function main() {
 	// check for debug speedup
 	var speedupFactor; 
@@ -167,50 +193,26 @@ function main() {
 		}
 	}	
 
-	document.getElementById("submit").onclick = function() { 
+	document.getElementById("submit").onclick = function() {
 		if (pausedStep !== null) {
-		currentStep = pausedStep;
-		pausedStep = null;
-	  } else {
-		pausedStep = currentStep;
-		currentStep = 0;
-		window.clearTimeout(currentTimeout);
-	  }
-	  
-	  executeStep();
-	};
-
+			currentStep = pausedStep;
+			pausedStep = null;
+			executeStep();
+		} else {
+			ensureAudioLoaded(function () {
+				pausedStep = currentStep;
+				currentStep = 0;
+				window.clearTimeout(currentTimeout);
+				executeStep();
+			})l
+		}
+	});
+	
 	$("#loading").css({ display: "none" });
 	$("#content").css({ display: "inline" });
 }
 
-$(window).on("load", function () {
-	var loadingDiv = $("loading");
-	function log(message) {
-		console.log(message);
-		loadingDiv.html(loadingDiv.html() + "<div>" + message + "</div>");
-	}
-
-	// wait for audio to load https://stackoverflow.com/questions/8059434/how-do-you-check-if-a-html5-audio-element-is-loaded
-	var audioElements = $("audio");
-	var remainingAudioElementsToLoad = audioElements.length;
-	log("Loading " + remainingAudioElementsToLoad + " audio files");
-	audioElements.each(function (index, element) {
-		var onLoaded = function () {
-			--remainingAudioElementsToLoad;
-			log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
-			if (remainingAudioElementsToLoad === 0) {
-				main();
-			}
-		};
-		
-		if (element.readyState === 4) {
-			onLoaded();
-		} else {
-			$(element).on("canplaythrough", onLoaded);
-		}
-	});
-});
+$(window).on("load", main);
 
 }());
 </script>
