@@ -158,6 +158,7 @@ function ensureAudioLoaded(callback) {
 
 	function log(message) {
 		console.log(message);
+		alert(message);
 	}
 
 	// wait for audio to load https://stackoverflow.com/questions/8059434/how-do-you-check-if-a-html5-audio-element-is-loaded
@@ -201,7 +202,11 @@ function main() {
 	}	
 
 	document.getElementById("submit").onclick = function() {
+		$("#submit").attr("disabled", "disabled");
+	
 		ensureAudioLoaded(function () {
+			$("#submit").removeAttr("disabled");
+		
 			if (pausedStep !== null) {
 				currentStep = pausedStep;
 				pausedStep = null;
