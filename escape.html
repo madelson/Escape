@@ -187,6 +187,7 @@ function main() {
 $(window).on("load", function () {
 	var audioElements = $("audio");
 	var remainingAudioElementsToLoad = audioElements.length;
+	console.log("Loading " + remainingAudioElementsToLoad + " audio files");
 	audioElements.on("canplaythrough", function () {
 		console.log("Loaded audio file. " + remainingAudioElementsToLoad + " remaining");
 		--remainingAudioElementsToLoad;
