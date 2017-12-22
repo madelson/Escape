@@ -162,7 +162,7 @@ function main() {
 		speedupFactor = 1;
 	}
 	for (var i = 0; i < steps.length; ++i) {
-		if (typeof steps[i].length === "number") {
+		if (typeof steps[i].length === "number" && steps.sound !== "countdown") {
 			steps[i].length *= speedupFactor;
 		}
 	}	
