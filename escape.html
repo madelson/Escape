@@ -150,6 +150,11 @@ function executeStep() {
 }
 
 var audioLoaded = false;
+// makes sure all audio on the page has loaded before
+// invoking callback. This may not be necessary anymore; I added it to improve things
+// on mobile but the real issue might have been the IOS click handler limitation (see
+// comment in button click handler). Nonetheless this makes sure we don't start playing
+// without getting all the audio files ready
 function ensureAudioLoaded(callback) {	
 	if (audioLoaded) {
 		callback();
