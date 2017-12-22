@@ -199,6 +199,7 @@ function main() {
 			pausedStep = null;
 			executeStep();
 		} else {
+			console.log("starting");
 			ensureAudioLoaded(function () {
 				pausedStep = currentStep;
 				currentStep = 0;
