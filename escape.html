@@ -185,14 +185,20 @@ function main() {
 }
 
 $(window).on("load", function () {
+	var loadingDiv = $("loading");
+	function log(message) {
+		console.log(message);
+		loadingDiv.html(loadingDiv.html() + "<div>" + message + "</div>");
+	}
+
 	// wait for audio to load https://stackoverflow.com/questions/8059434/how-do-you-check-if-a-html5-audio-element-is-loaded
 	var audioElements = $("audio");
 	var remainingAudioElementsToLoad = audioElements.length;
-	console.log("Loading " + remainingAudioElementsToLoad + " audio files");
+	log("Loading " + remainingAudioElementsToLoad + " audio files");
 	audioElements.each(function (index, element) {
 		var onLoaded = function () {
 			--remainingAudioElementsToLoad;
-			console.log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
+			log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
 			if (remainingAudioElementsToLoad === 0) {
 				main();
 			}
