@@ -149,7 +149,13 @@ function executeStep() {
   }
 }
 
+var audioLoaded = false;
 function ensureAudioLoaded(callback) {
+	if (audioLoaded) {
+		callback();
+		return;
+	}
+
 	function log(message) {
 		console.log(message);
 	}
@@ -163,6 +169,7 @@ function ensureAudioLoaded(callback) {
 			--remainingAudioElementsToLoad;
 			log("Loaded " + element.id + ". " + remainingAudioElementsToLoad + " remaining");
 			if (remainingAudioElementsToLoad === 0) {
+				audioLoaded = true;
 				callback();
 			}
 		};
@@ -194,19 +201,18 @@ function main() {
 	}	
 
 	document.getElementById("submit").onclick = function() {
-		if (pausedStep !== null) {
-			currentStep = pausedStep;
-			pausedStep = null;
-			executeStep();
-		} else {
-			console.log("starting");
-			ensureAudioLoaded(function () {
+		ensureAudioLoaded(function () {
+			if (pausedStep !== null) {
+				currentStep = pausedStep;
+				pausedStep = null;
+			} else {
 				pausedStep = currentStep;
 				currentStep = 0;
 				window.clearTimeout(currentTimeout);
-				executeStep();
-			});
-		}
+			}
+			
+			executeStep();
+		});
 	};
 	
 	$("#loading").css({ display: "none" });
