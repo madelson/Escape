@@ -5,21 +5,23 @@
 
 </head>
 
-<body style="display: none;">
+<body>
 
-<div id="display" style="text-align: center;">
-	<div id="message" style="font-size: 40px; padding: 20px;">Click Play to start!</div>
-	<div id="timer" style="font-size: 90px; padding: 20px;"></div>
+<div id="content" style="display: none;">
+	<div id="display" style="text-align: center;">
+		<div id="message" style="font-size: 40px; padding: 20px;">Click Play to start!</div>
+		<div id="timer" style="font-size: 90px; padding: 20px;"></div>
+	</div>
+	<center style="padding: 5px;"><button id="submit" style="width: 50%; height: 100px; font-size: 40px;">Play</button></center>
 </div>
-<center style="padding: 5px;"><button id="submit" style="width: 50%; height: 100px; font-size: 40px;">Play</button></center>
-
+<div id="loading">Loading...</div>
+	
 <div style="display: none;">
 	<!-- from https://freesound.org/browse/tags/sound-effects/ -->
-	<audio id="gong" src="https://raw.githubusercontent.com/madelson/Escape/master/gong.wav"></audio>
-	<audio id="cymbal" src="https://raw.githubusercontent.com/madelson/Escape/master/cymbal.wav"></audio>
-	<audio id="countdown" src="https://raw.githubusercontent.com/madelson/Escape/master/countdown.wav"></audio>
+	<audio id="gong" src="https://raw.githubusercontent.com/madelson/Escape/master/gong.mp3"></audio>
+	<audio id="cymbal" src="https://raw.githubusercontent.com/madelson/Escape/master/cymbal.mp3"></audio>
+	<audio id="countdown" src="https://raw.githubusercontent.com/madelson/Escape/master/countdown.mp3"></audio>
 </div>
-
 
 <script
   type="text/javascript"
@@ -101,11 +103,11 @@ function formatTime(seconds) {
 
 var currentlyPlaying = null;
 function playAudio(id) {
+	if (typeof id === "string") {
 		if (currentlyPlaying) { 
 			currentlyPlaying.pause();
 		}
-
-	if (typeof id === "string") {	
+	
 		currentlyPlaying = document.getElementById(id);
 		currentlyPlaying.currentTime = 0;
 		currentlyPlaying.play();
@@ -146,13 +148,7 @@ function executeStep() {
   }
 }
 
-$(window).on("load", function () {
-	// if we loaded without a cache buster, reload with a cache buster
-	if (window.location.href.indexOf("cb=") < 0) {
-		window.location.href += "?&cb=" + Date.now();
-		return;
-	}	
-	
+function main() {
 	// check for debug speedup
 	var speedupFactor; 
 	if (window.location.href.toLowerCase().indexOf("speedup=medium") >= 0) {
@@ -162,15 +158,13 @@ $(window).on("load", function () {
 		speedupFactor = .05;
 		console.log("speedup x " + (1 / speedupFactor));
 	} else {
-		speedupFactor = .1;
+		speedupFactor = 1;
 	}
 	for (var i = 0; i < steps.length; ++i) {
 		if (typeof steps[i].length === "number") {
 			steps[i].length *= speedupFactor;
 		}
 	}	
-	
-	$('audio').on('canplaythrough', function () { window.alert("ready!"); });
 
 	document.getElementById("submit").onclick = function() { 
 		if (pausedStep !== null) {
@@ -185,7 +179,20 @@ $(window).on("load", function () {
 	  executeStep();
 	};
 
-	$('body').css({ display: "inline" });
+	$("#loading").css({ display: "none" });
+	$("#content").css({ display: "inline" });
+}
+
+$(window).on("load", function () {
+	var audioElements = $("audio");
+	var remainingAudioElementsToLoad = audioElements.length;
+	audioElements.on("canplaythrough", function () {
+		console.log("Loaded audio file. " + remainingAudioElementsToLoad + " remaining");
+		--remainingAudioElementsToLoad;
+		if (remainingAudioElementsToLoad === 0) {
+			main();
+		}
+	});
 });
 </script>
 
