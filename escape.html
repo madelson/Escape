@@ -101,11 +101,11 @@ function formatTime(seconds) {
 
 var currentlyPlaying = null;
 function playAudio(id) {
-	if (typeof id === "string") {
 		if (currentlyPlaying) { 
 			currentlyPlaying.pause();
 		}
-	
+
+	if (typeof id === "string") {	
 		currentlyPlaying = document.getElementById(id);
 		currentlyPlaying.currentTime = 0;
 		currentlyPlaying.play();
